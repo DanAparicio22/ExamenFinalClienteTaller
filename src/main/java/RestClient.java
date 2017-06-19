@@ -18,6 +18,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 public class RestClient {
     public static void main(String[] args) {
+
         try {
 
             while(true){
@@ -32,12 +33,15 @@ public class RestClient {
                 postParameters = new ArrayList<NameValuePair>();
                 Random rand = new Random();
 
+                Integer upanddown=0;
                 Integer  step = rand.nextInt(50) + 1;
                 Integer bpms = 39 + rand.nextInt(250 - 39 + 1); // Genera valores entre 39 y 250
                 Integer distances = rand.nextInt(4)+1;
                 Float latitude = rand.nextFloat()*7+3;
                 Float longitude = rand.nextFloat()*10+5;
                 Integer calories =rand.nextInt(20)+5;
+                Integer cantidaddeescalones = rand.nextInt(2101)+(-100);
+                Integer aleatorio=rand.nextInt(7)+0;
                 Date fecha = getFechaEntreAyerYHoy();
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(fecha);
@@ -51,6 +55,11 @@ public class RestClient {
                     intensidad = "alta";
                 }
 
+                if(aleatorio%2==0){
+                    upanddown=1;
+                }else{
+                    upanddown=0;
+                }
                 postParameters.add(new BasicNameValuePair("steps",step.toString()));
                 postParameters.add(new BasicNameValuePair("bpm", bpms.toString()));
                 postParameters.add(new BasicNameValuePair("distance", distances.toString()));
@@ -58,8 +67,10 @@ public class RestClient {
                 postParameters.add(new BasicNameValuePair("longitude", longitude.toString()));
                 postParameters.add(new BasicNameValuePair("calories", calories.toString()));
                 postParameters.add(new BasicNameValuePair("fecha_evento", fecha_evento));
-                postParameters.add(new BasicNameValuePair("user", "2"));
+                postParameters.add(new BasicNameValuePair("user", "1"));
                 postParameters.add(new BasicNameValuePair("intensidad", intensidad));
+                postParameters.add(new BasicNameValuePair("upanddown",upanddown.toString()));
+                postParameters.add(new BasicNameValuePair("cantidad",cantidaddeescalones.toString()));
 
                 postRequest.setEntity(new UrlEncodedFormEntity(postParameters));
                 postRequest.addHeader("accept", "application/json");
@@ -81,7 +92,7 @@ public class RestClient {
                 }
                 httpClient.getConnectionManager().shutdown();
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
